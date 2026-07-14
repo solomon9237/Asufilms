@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ASUfilms</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -13,30 +14,56 @@
       <p class="subtitle">Turn your ideas into video, instantly</p>
     </header>
 
-    <main>
-      <div class="prompt-box">
-        <textarea
-          id="promptInput"
-          placeholder="Describe the video you want to create... e.g. 'A drone shot flying over Lagos at sunset, cinematic'"
-          rows="4"
-        ></textarea>
-        <button id="generateBtn">Generate Video</button>
+        <main>
+      <div id="authBox" class="auth-box">
+        <div class="auth-tabs">
+          <button id="tabLogin" class="auth-tab active">Log In</button>
+          <button id="tabSignup" class="auth-tab">Sign Up</button>
+        </div>
+
+        <input type="email" id="authEmail" placeholder="Email" />
+        <input type="password" id="authPassword" placeholder="Password" />
+
+        <button id="authSubmitBtn">Log In</button>
+
+        <div class="divider">or</div>
+
+        <button id="googleBtn" class="google-btn">Continue with Google</button>
+
+        <p id="authError" class="auth-error hidden"></p>
       </div>
 
-      <div id="statusBox" class="status-box hidden">
-        <div class="spinner"></div>
-        <p id="statusText">Starting generation...</p>
+      <div id="userBar" class="user-bar hidden">
+        <span id="userEmail"></span>
+        <button id="logoutBtn">Log out</button>
       </div>
 
-      <div id="resultBox" class="result-box hidden">
-        <video id="resultVideo" controls></video>
-        <a id="downloadLink" download="generated-video.mp4">Download Video</a>
-      </div>
+      <div id="promptSection" class="hidden">
+        <div class="prompt-box">
+          <textarea
+            id="promptInput"
+            placeholder="Describe the video you want to create... e.g. 'A drone shot flying over Lagos at sunset, cinematic'"
+            rows="4"
+          ></textarea>
+          <button id="generateBtn">Generate Video</button>
+        </div>
 
-      <div id="errorBox" class="error-box hidden">
-        <p id="errorText"></p>
+        <div id="statusBox" class="status-box hidden">
+          <div class="spinner"></div>
+          <p id="statusText">Starting generation...</p>
+        </div>
+
+        <div id="resultBox" class="result-box hidden">
+          <video id="resultVideo" controls></video>
+          <a id="downloadLink" download="generated-video.mp4">Download Video</a>
+        </div>
+
+        <div id="errorBox" class="error-box hidden">
+          <p id="errorText"></p>
+        </div>
       </div>
     </main>
+
   </div>
 
   <script src="script.js"></script>
