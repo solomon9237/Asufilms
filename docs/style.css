@@ -136,3 +136,116 @@ video {
 .hidden {
   display: none;
 }
+.auth-box {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.auth-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.auth-tab {
+  flex: 1;
+  background: transparent;
+  border: 1px solid #1f2937;
+  color: #8899aa;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-tab.active {
+  background: #1f2937;
+  color: #e6f1ff;
+  border-color: #00e5ff;
+}
+
+#authEmail,
+#authPassword {
+  width: 100%;
+  background: #0a0e17;
+  border: 1px solid #1f2937;
+  border-radius: 8px;
+  color: #e6f1ff;
+  padding: 12px;
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+#authEmail:focus,
+#authPassword:focus {
+  outline: none;
+  border-color: #00e5ff;
+}
+
+#authSubmitBtn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(90deg, #00e5ff, #7c4dff);
+  border: none;
+  border-radius: 8px;
+  color: #0a0e17;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.divider {
+  text-align: center;
+  color: #8899aa;
+  margin: 16px 0;
+  font-size: 0.9rem;
+}
+
+.google-btn {
+  width: 100%;
+  padding: 14px;
+  background: #ffffff;
+  border: none;
+  border-radius: 8px;
+  color: #1f2937;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.auth-error {
+  margin-top: 12px;
+  color: #fca5a5;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.user-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 14px 20px;
+  margin-bottom: 16px;
+}
+
+#userEmail {
+  color: #8899aa;
+  font-size: 0.9rem;
+}
+
+#logoutBtn {
+  background: transparent;
+  border: 1px solid #1f2937;
+  color: #e6f1ff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  width: auto;
+  margin: 0;
+}
+
