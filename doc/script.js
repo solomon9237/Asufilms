@@ -1,5 +1,6 @@
 // Change this if your backend runs on a different URL
-const API_BASE = "http://localhost:3000";
+const API_BASE = "https://asufilms.onrender.com";
+
 
 const promptInput = document.getElementById("promptInput");
 const generateBtn = document.getElementById("generateBtn");
