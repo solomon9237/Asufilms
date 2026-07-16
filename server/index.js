@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import Replicate from "replicate";
 
 dotenv.config();
 
@@ -9,15 +8,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const replicate = new Replicate({
-  auth: process.env.REPLICATE_API_TOKEN,
-});
+const FAL_KEY = process.env.FAL_KEY;
+const MODEL = "fal-ai/wan-t2v";
 
-// Swap this model string to use a different video model.
-// Cheap/fast default: Wan 2.5 T2V Fast
-const VIDEO_MODEL = "wan-video/wan-2.5-t2v-fast";
-
-// Start a video generation. Returns a prediction id immediately.
+// Start a video generation. Returns a request id immediately.
 app.post("/api/generate", async (req, res) => {
   const { prompt } = req.body;
 
@@ -26,29 +20,52 @@ app.post("/api/generate", async (req, res) => {
   }
 
   try {
-    const prediction = await replicate.predictions.create({
-      model: VIDEO_MODEL,
-      input: { prompt },
+    const falRes = await fetch(`https://queue.fal.run/${MODEL}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Key ${FAL_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ prompt }),
     });
 
-    res.json({ id: prediction.id, status: prediction.status });
+    const data = await falRes.json();
+
+    if (!falRes.ok) {
+      throw new Error(data.detail || "Failed to start video generation");
+    }
+
+    res.json({ id: data.request_id });
   } catch (err) {
     console.error("Generate error:", err);
-    res.status(500).json({ error: "Failed to start video generation" });
+    res.status(500).json({ error: err.message || "Failed to start video generation" });
   }
 });
 
-// Poll this with the prediction id to check progress / get the final video URL.
+// Poll this with the request id to check progress / get the final video URL.
 app.get("/api/status/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    const prediction = await replicate.predictions.get(id);
+    const statusRes = await fetch(
+      `https://queue.fal.run/${MODEL}/requests/${id}/status`,
+      { headers: { Authorization: `Key ${FAL_KEY}` } }
+    );
+    const statusData = await statusRes.json();
+
+    if (statusData.status !== "COMPLETED") {
+      return res.json({ status: statusData.status.toLowerCase(), output: null });
+    }
+
+    const resultRes = await fetch(
+      `https://queue.fal.run/${MODEL}/requests/${id}`,
+      { headers: { Authorization: `Key ${FAL_KEY}` } }
+    );
+    const resultData = await resultRes.json();
 
     res.json({
-      status: prediction.status, // starting | processing | succeeded | failed | canceled
-      output: prediction.output || null,
-      error: prediction.error || null,
+      status: "succeeded",
+      output: resultData.video?.url || null,
     });
   } catch (err) {
     console.error("Status check error:", err);
